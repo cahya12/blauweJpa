@@ -1,0 +1,146 @@
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- EXAMPLE-SOURCE-START -->
+
+	<style type="text/css">
+.ui-row-editor .ui-row-editor-pencil {
+	margin-left: 8px;
+}
+</style>
+
+
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+		<p:tabView activeIndex="#{tabViewManagedBean.index}">
+
+			<p:tab title="CONTACT US">
+
+				<p:dataTable id="contactus1" var="contactus"
+					value="#{contactUsEJB.contactusList}" editable="true"
+					style="margin-bottom:20px">
+
+					<p:column headerText="Id">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contactus.contact_us_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{contactus.contact_us_id}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contactus.name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contactus.name}" style="width:100%"
+									label="Name" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Address">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contactus.address}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contactus.address}" style="width:100%"
+									label="Name" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Phone">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contactus.phone_no}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contactus.phone_no}" style="width:100%"
+									label="Name" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Email">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contactus.email_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contactus.email_id}" style="width:100%"
+									label="Name" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Message">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{contactus.message}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{contactus.message}" style="width:100%"
+									label="Name" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column style="width:35px">
+						<p:rowEditor />
+						<h:commandButton id="deleteLink"
+							styleClass="ui-icon ui-icon-trash"
+							actionListener="#{contactUsEJB.delContactUs(contactus.contact_us_id)}"
+							style="margin-left: 8px" />
+					</p:column>
+					<p:column style="width:35px">
+						<h:commandButton id="updateLink"
+							actionListener="#{contactUsEJB.updateContactUs(contactus.contact_us_id,
+							contactus.name,contactus.address,contactus.phone_no,contactus.email_id,contactus.message)}"></h:commandButton>
+					</p:column>
+
+				</p:dataTable>
+
+				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
+
+					<p:outputLabel value="Id: " />
+					<p:inputText value="#{contactUsEJB.contactUs.contact_us_id}"></p:inputText>
+
+					<p:outputLabel value="Name: " />
+					<p:inputText value="#{contactUsEJB.contactUs.name}"></p:inputText>
+
+					<p:outputLabel value="Address: " />
+					<p:inputText value="#{contactUsEJB.contactUs.address}"></p:inputText>
+
+					<p:outputLabel value="Phone" />
+					<p:inputText value="#{contactUsEJB.contactUs.phone_no}"></p:inputText>
+
+					<p:outputLabel value="Email" />
+					<p:inputText value="#{contactUsEJB.contactUs.email_id}"></p:inputText>
+
+					<p:outputLabel value="Message" />
+					<p:inputText value="#{contactUsEJB.contactUs.message}"></p:inputText>
+				</p:panelGrid>
+
+				<h:commandButton value="Run populate table"
+					actionListener="#{contactUsEJB.testing()}" />
+				<h:commandButton value="Save"
+					actionListener="#{contactUsEJB.saveContactUs()}" />
+				<h:commandButton value="Refresh Table"
+					actionListener="#{contactUsEJB.init()}" />
+
+
+			</p:tab>
+
+		</p:tabView>
+	</h:form>
+
+</ui:composition>

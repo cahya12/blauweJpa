@@ -34,6 +34,42 @@
 							</f:facet>
 						</p:cellEditor>
 					</p:column>
+					
+					<p:column headerText="Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{course.event_name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{course.event_name}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="start date">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{course.start_date}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{course.start_date}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column headerText="end date">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{course.end_date}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{course.end_date}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
 
 				
 
@@ -55,16 +91,11 @@
 
 					<p:outputLabel value="Id: " />
 					<p:inputText value="#{eventEJB.course.event_id}"></p:inputText>
+					
+					<p:outputLabel value="Name: " />
+					<p:inputText value="#{eventEJB.course.event_name}"></p:inputText>
 
-					<!-- <p:outputLabel value="Name: " />
-					<p:inputText value="#{courseEJB.course.course_name}"></p:inputText>
-
-					<p:outputLabel value="Duration: " />
-					<p:inputText value="#{courseEJB.course.course_duration}"></p:inputText>
-
-					<p:outputLabel value="Description" />
-					<p:inputText value="#{courseEJB.course.description}"></p:inputText>
- -->
+					
 				</p:panelGrid>
 
 				<h:commandButton value="Run populate table"

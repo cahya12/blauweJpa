@@ -7,9 +7,10 @@ import javax.inject.Named;
 import javax.persistence.*;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.transaction.Transactional;
-import com.mini.entity.Course;
+import com.mini.entity.Event;
 import com.mini.entity.Event;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ public class EventEJB {
 	static int counter = 102;
 
 	Event _c = new Event();
-	List<Event> courseList = new ArrayList<Event>();
+	List<Event> eventList = new ArrayList<Event>();
 
 	@SuppressWarnings("unchecked")
 	@PostConstruct
@@ -42,7 +43,7 @@ public class EventEJB {
 
 			System.out.println("running .... 2");
 
-			showCourse();
+			showEvent();
 
 			System.out.println("Running ..... 3");
 
@@ -58,11 +59,11 @@ public class EventEJB {
 	public void testing() {
 
 		try {
-			System.out.println("running .... persistCourse 1");
+			System.out.println("running .... persistEvent 1");
 
-			persistCourse(entityManager);
+			persistEvent(entityManager);
 
-			System.out.println("running .... persistCourse 2");
+			System.out.println("running .... persistEvent 2");
 
 		} catch (Exception e) {
 			// LOGGER.log(Level.SEVERE, e.getMessage(), e);
@@ -86,19 +87,17 @@ public class EventEJB {
 		}
 	}
 
-	private void persistCourse(EntityManager entityManager) {
+	private void persistEvent(EntityManager entityManager) {
 		EntityTransaction transaction = entityManager.getTransaction();
 
 		try {
 
 			transaction.begin();
 
-			Course c = new Course();
+			Event c = new Event();
 
-			c.setCourse_id(counter++);
-			c.setCourse_duration("2 days");
-			c.setCourse_name("MGDG");
-			c.setDescription("hola");
+			c.setEvent_id(counter++);
+			c.setEvent_name("MGDG");
 
 			entityManager.persist(c);
 
@@ -109,18 +108,18 @@ public class EventEJB {
 			e.printStackTrace();
 
 			if (transaction.isActive()) {
-				System.out.println("running .... persistCourse transaction.isActive()");
+				System.out.println("running .... persistEvent transaction.isActive()");
 				transaction.rollback();
 			}
 		}
 	}
 
-	// Course
-	public void showCourse() {
+	// Event
+	public void showEvent() {
 		try {
 			Query query = entityManager.createQuery("select e from Event e");
 
-			courseList = (List<Event>) query.getResultList();
+			eventList = (List<Event>) query.getResultList();
 			query.getResultList();
 			System.out.println(query.getFirstResult());
 		} catch (Exception e) {
@@ -128,7 +127,7 @@ public class EventEJB {
 		}
 	}
 
-	public void saveCourse() {
+	public void saveEvent() {
 		EntityTransaction transaction = entityManager.getTransaction();
 
 		try {
@@ -146,13 +145,13 @@ public class EventEJB {
 			e.printStackTrace();
 
 			if (transaction.isActive()) {
-				System.out.println("running .... persistCourse transaction.isActive()");
+				System.out.println("running .... persistEvent transaction.isActive()");
 				transaction.rollback();
 			}
 		}
 	}
 
-	public void delCourse(int id) {
+	public void delEvent(int id) {
 		try {
 			entityManager.getTransaction().begin();
 
@@ -162,8 +161,8 @@ public class EventEJB {
 			entityManager.flush();
 			entityManager.clear();
 
-			Query query = entityManager.createQuery("DELETE Course b WHERE course_id = :course_id");
-			query.setParameter("course_id", id);
+			Query query = entityManager.createQuery("DELETE Event b WHERE event_id = :event_id");
+			query.setParameter("event_id", id);
 			query.executeUpdate();
 
 			entityManager.getTransaction().commit();
@@ -175,19 +174,19 @@ public class EventEJB {
 		}
 	}
 
-	public void updatecoba(int course_id, String course_name, String course_duration, String description) {
+	public void updatecoba(int event_id, String event_name, Date event_duration, Date description) {
 		EntityTransaction transaction = entityManager.getTransaction();
 
 		try {
 
 			transaction.begin();
 
-			Course course = (Course) entityManager.find(Course.class, course_id);
-			entityManager.find(Course.class, course_id);
+			Event event = (Event) entityManager.find(Event.class, event_id);
+			entityManager.find(Event.class, event_id);
 			entityManager.createQuery(
-					"update Course c set c.course_name = :course_name, c.course_duration = :course_duration, c.description = :description where c.course_id=:course_id")
-					.setParameter("course_name", course_name).setParameter("course_id", course_id)
-					.setParameter("course_duration", course_duration).setParameter("description", description)
+					"update Event c set c.event_name = :event_name, c.event_duration = :event_duration, c.description = :description where c.event_id=:event_id")
+					.setParameter("event_name", event_name).setParameter("event_id", event_id)
+					.setParameter("event_duration", event_duration).setParameter("description", description)
 					.executeUpdate();
 			transaction.commit();
 
@@ -198,24 +197,24 @@ public class EventEJB {
 			e.printStackTrace();
 
 			if (transaction.isActive()) {
-				System.out.println("running .... persistCourse transaction.isActive()");
+				System.out.println("running .... persistEvent transaction.isActive()");
 				transaction.rollback();
 			}
 		}
 
 	}
 
-	public void setCourse(Event e) {
+	public void setEvent(Event e) {
 		this._c = e;
 	}
 
-	public Event getCourse() {
+	public Event getEvent() {
 
 		return _c;
 	}
 
-	public List<Event> getCourseList() {
-		return courseList;
+	public List<Event> getEventList() {
+		return eventList;
 	}
 
 }

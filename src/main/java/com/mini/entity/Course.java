@@ -1,9 +1,12 @@
 package com.mini.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /* 
@@ -27,6 +30,8 @@ public class Course implements Serializable {
 	String course_name;
 	String course_duration;
 	String description;
+	@ManyToMany(mappedBy = "courseSaya")
+	private Set<Student> studentSaya = new HashSet<>();
 	
 	
 	public int getCourse_id() {
@@ -53,5 +58,12 @@ public class Course implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public Set<Student> getStudentSaya() {
+		return studentSaya;
+	}
+	public void setStudentSaya(Set<Student> studentSaya) {
+		this.studentSaya = studentSaya;
+	}
+	
 	
 }

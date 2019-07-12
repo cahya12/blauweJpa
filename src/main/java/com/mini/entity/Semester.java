@@ -1,10 +1,16 @@
 package com.mini.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
@@ -20,32 +26,46 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "tbl_semester")
-@SecondaryTable(name = "tbl_course")
+//@SecondaryTable(name = "tbl_course")
 public class Semester implements Serializable {
 	static final long serialVersionUID = 123456l;
-	
+
 	@Id
 	int semester_id;
-	@Column(table = "tbl_course")
+//	@Column(table = "tbl_course")
 	int course_id;
 	String semester;
-	
-	
+	@OneToMany(mappedBy = "semesterSaya")
+	private Set<Student> student = new HashSet<Student>();
+
+	public Set<Student> getStudent() {
+		return student;
+	}
+
+	public void setStudent(Set<Student> student) {
+		this.student = student;
+	}
+
 	public int getSemester_id() {
 		return semester_id;
 	}
+
 	public void setSemester_id(int semester_id) {
 		this.semester_id = semester_id;
 	}
+
 	public int getCourse_id() {
 		return course_id;
 	}
+
 	public void setCourse_id(int course_id) {
 		this.course_id = course_id;
 	}
+
 	public String getSemester() {
 		return semester;
 	}
+
 	public void setSemester(String semester) {
 		this.semester = semester;
 	}

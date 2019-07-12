@@ -31,6 +31,7 @@
 	<class>com.mini.entity.Event</class>
 	<class>com.mini.entity.Exam</class>
 	<class>com.mini.entity.Faculties</class>
+	<class>com.mini.entity.Feedback</class>
 	<class>com.mini.entity.News</class>
 	<class>com.mini.entity.Semester</class>
 	<class>com.mini.entity.Student</class>

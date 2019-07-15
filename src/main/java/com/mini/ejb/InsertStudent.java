@@ -159,7 +159,7 @@ public class InsertStudent implements Serializable {
 
 	}
 
-	public void updateStudent(int studentID, int courseId, int semId, String firstName, String middleName,
+	public void updateStudent(int studentID, int semId, String firstName, String middleName,
 			String lastName, int gender, String address, String contactNo, String emailId) {
 
 		try {
@@ -168,13 +168,9 @@ public class InsertStudent implements Serializable {
 			Student student1 = new Student();
 			student1 = entityManager.find(Student.class, studentID);
 
-			Course course1 = new Course();
-			course1 = entityManager.find(Course.class, courseId);
-
 			Semester semester1 = new Semester();
 			semester1 = entityManager.find(Semester.class, semId);
-
-			student1.setCourseSaya(course1);
+			
 			student1.setStudent(semester1);
 			student1.setFirst_name(firstName);
 			student1.setMiddle_name(middleName);

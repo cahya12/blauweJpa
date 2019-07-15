@@ -11,73 +11,120 @@
 }
 </style>
 
+	<p:tabView activeIndex="#{tabViewManagedBean.index}">
 
-	<h:form id="form">
-		<p:growl id="msgs" showDetail="true" />
-		<p:tabView activeIndex="#{tabViewManagedBean.index}">
+		<p:tab title="News">
 
-			<p:tab title="NEWS">
-
-				<p:dataTable id="news1" var="news"
-					value="#{newsEJB.newsList}" editable="true"
-					style="margin-bottom:20px">
-
-
-					<p:column headerText="Id">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{news.news_id}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText id="modelInput" value="#{news.news_id}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
+			<p:panel id="ShowNews" header="Isi Tabel News" style="width:100%">
+				<p:dataTable value="#{newsEJB.newses}" var="ews">
+					<!-- 					<p:repeat value="#{murid.courseSaya}" var="corse_"> -->
+					<p:column headerText="News Title">
+						<h:outputText value="#{ews.news_title}" />
 					</p:column>
-
-				
-
-
-					<p:column style="width:35px">
-						<p:rowEditor />
+					<p:column headerText="News Content">
+						<h:outputText value="#{ews.news_content}" />
+					</p:column>
+					<p:column headerText="Is on Home Page">
+						<h:outputText value="#{ews.isOnhomepage}" />
+					</p:column>
+					<p:column headerText="Start Date">
+						<h:outputText value="#{ews.start_date}" />
+					</p:column>
+					<p:column headerText="End Date">
+						<h:outputText value="#{ews.end_date}" />
+					</p:column>
+					<p:column headerText="Action">
 						<h:commandButton id="deleteLink"
-							styleClass="ui-icon ui-icon-trash"
-							actionListener="#{newsEJB.delCourse(news.news_id)}"
-							style="margin-left: 8px" />
-					</p:column>
-					<p:column style="width:35px">
+							action="#{newsEJB.delNews(ews.news_id)}"
+							style="margin: 5px; width:80%" value="Delete">
+						</h:commandButton>
 						<h:commandButton id="updateLink"
-							actionListener="#{newsEJB.updatecoba(news.news_id,news.news_name,news.news_duration,news.description)}"></h:commandButton>
+							actionListener="#{newsEJB.bantuUpdate(ews.news_id)}"
+							style="margin: 5px; width:80%" value="Update">
+						</h:commandButton>
 					</p:column>
+
 				</p:dataTable>
+			</p:panel>
 
-				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
+			<h:commandButton value="refresh" actionListener="#{newsEJB.init()}" />
 
-					<p:outputLabel value="Id: " />
-					<p:inputText value="#{newsEJB.news.news_id}"></p:inputText>
+			<p:dialog header="Update News" widgetVar="dlg4" minHeight="40">
+				<p:repeat value="#{newsEJB.updateNewsLur}" var="lur">
+					<p:panelGrid columns="2" cellpadding="2" cellspacing="2"
+						style="width:100%">
+						<p:outputLabel value="News Id: " />
+						<p:inputText value="#{lur.news_id}"></p:inputText>
 
-					<!-- <p:outputLabel value="Name: " />
-					<p:inputText value="#{newsEJB.news.news_name}"></p:inputText>
+						<p:outputLabel for="IsOnHomePage" value="Is On HomePage: " />
 
-					<p:outputLabel value="Duration: " />
-					<p:inputText value="#{newsEJB.news.news_duration}"></p:inputText>
+						<h:selectOneMenu id="IsOnHomePage" value="#{newsEJB.onhomeUpdate}"
+							style="width:100%">
+							<f:selectItem itemLabel="Select Semester" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{newsEJB.onhome}" />
+						</h:selectOneMenu>
 
-					<p:outputLabel value="Description" />
-					<p:inputText value="#{newsEJB.news.description}"></p:inputText>
- -->
+						<p:outputLabel value="News Title: " />
+						<p:inputText value="#{lur.news_title}"></p:inputText>
+
+						<p:outputLabel value="News Content: " />
+						<p:inputText value="#{lur.news_content}"></p:inputText>
+
+						<p:outputLabel value="Start Date: " />
+						<p:inputText value="#{newsEJB.startUpdate}"
+							pattern="yyyy-MM-dd HH-mm-ss"></p:inputText>
+
+						<p:outputLabel value="End Date: " />
+						<p:inputText value="#{newsEJB.endUpdate}"
+							pattern="yyyy-MM-dd HH-mm-ss"></p:inputText>
+
+						<h:commandButton value="Update News"
+							actionListener="#{newsEJB.updateNews(lur.news_id, lur.news_title, lur.news_content,
+						newsEJB.startUpdate, newsEJB.endUpdate)}" />
+
+					</p:panelGrid>
+				</p:repeat>
+			</p:dialog>
+
+			<p:dialog header="Insert News" widgetVar="dlg3" minHeight="40">
+				<p:panelGrid columns="2" cellpadding="2" cellspacing="2"
+					style="width:100%">
+
+					<p:outputLabel value="News Title: " />
+					<p:inputText value="#{newsEJB.news.news_title}"></p:inputText>
+
+					<p:outputLabel value="News Content: " />
+					<p:inputText value="#{newsEJB.news.news_content}"></p:inputText>
+
+					<p:outputLabel value="Is on HomePage : " />
+					<h:selectOneMenu id="onHomePage" value="#{newsEJB.onhomePage}"
+						style="width:100%">
+						<f:selectItem itemLabel="On Home Page ?" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{newsEJB.onhome}" />
+					</h:selectOneMenu>
+
+					<p:outputLabel value="Start Date: " />
+					<p:inputText value="#{newsEJB.startDate}"
+						pattern="yyyy-MM-dd HH-mm-ss"></p:inputText>
+
+					<p:outputLabel value="End Date: " />
+					<p:inputText value="#{newsEJB.endDate}"
+						pattern="yyyy-MM-dd HH-mm-ss"></p:inputText>
+
 				</p:panelGrid>
+				<h:commandButton value="Insert News"
+					actionListener="#{newsEJB.insertNews()}">
+					<f:actionListener binding="#{newsEJB.init()}" />
+				</h:commandButton>
+			</p:dialog>
 
-				<h:commandButton value="Run populate table"
-					actionListener="#{newsEJB.testing()}" />
-				<h:commandButton value="Save"
-					actionListener="#{newsEJB.saveNews()}" />
-				<h:commandButton value="Refresh Table"
-					actionListener="#{newsEJB.init()}" />
+			<p:commandButton value="Insert News" type="button"
+				onclick="PF('dlg3').show();" />
+
+		</p:tab>
 
 
-			</p:tab>
-
-		</p:tabView>
-	</h:form>
-
+	</p:tabView>
 </ui:composition>

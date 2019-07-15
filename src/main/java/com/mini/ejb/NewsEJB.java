@@ -1,150 +1,79 @@
 package com.mini.ejb;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import javax.persistence.*;
-import javax.tools.JavaCompiler.CompilationTask;
-import javax.transaction.Transactional;
-import com.mini.entity.News;
-import com.mini.entity.News;
-import com.mini.entity.News;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.primefaces.PrimeFaces;
+
+import com.mini.entity.News;
+import com.mini.entity.Student;
 
 @Named
 @ApplicationScoped
-public class NewsEJB {
-	private static final Logger LOGGER = Logger.getLogger("JPA");
+public class NewsEJB implements Serializable {
+	static final long serialVersionUID = 1l;
 	static EntityManagerFactory factory = null;
 	static EntityManager entityManager = null;
-	static int counter = 102;
 
-	News _c = new News();
-	List<News> courseList = new ArrayList<News>();
+	News news;
+	List<News> newses;
+	int i = 0;
+	String startDate, endDate, startUpdate,endUpdate;
+	boolean onhomePage, onhomeUpdate;
+	Date start_Date, end_Date;
+	List<String> onhome;
+	
+	News updateNewsLur;
 
-	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void init() {
-
 		try {
-
-			System.out.println("running News.... ");
-
+			startDate = "";
+			endDate = "";
+			onhomePage = false;
+			news = new News();
 			factory = Persistence.createEntityManagerFactory("TrainingUnit");
-
 			entityManager = factory.createEntityManager();
-
-			System.out.println("running .... 123");
-
-			System.out.println("running .... 2");
-
-			showNews();
-
-			System.out.println("Running ..... 3");
-
+			onhome = new ArrayList<String>();
+			onhome.add("true");
+			onhome.add("false");
+			readNews();
 		} catch (Exception e) {
-			LOGGER.log(Level.SEVERE, e.getMessage(), e);
-			e.printStackTrace();
-
-		} finally {
 
 		}
 	}
 
-	public void testing() {
-
-		try {
-			System.out.println("running .... persistNews 1");
-
-			persistNews(entityManager);
-
-			System.out.println("running .... persistNews 2");
-
-		} catch (Exception e) {
-			// LOGGER.log(Level.SEVERE, e.getMessage(), e);
-
-			System.out.println(e.getMessage());
-
-			e.printStackTrace();
-
-		}
-	}
-
-	@PreDestroy
-	public void destroyrun() {
-
-		if (entityManager != null) {
-			entityManager.close();
-		}
-
-		if (factory != null) {
-			factory.close();
-		}
-	}
-
-	private void persistNews(EntityManager entityManager) {
+	public void insertNews() {
 		EntityTransaction transaction = entityManager.getTransaction();
-
 		try {
-
+			i = i + 1;
+			start_Date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(startDate);
+			end_Date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(endDate);
 			transaction.begin();
-
-			News c = new News();
-
-			c.setNews_id(counter++);
-
-			entityManager.persist(c);
-
+			news.setEnd_date(end_Date);
+			news.setStart_date(start_Date);
+			news.setOnhomepage(onhomePage);
+			news.setNews_id(i);
+			entityManager.persist(news);
 			transaction.commit();
-
 		} catch (Exception e) {
-
 			e.printStackTrace();
 
 			if (transaction.isActive()) {
-				System.out.println("running .... persistNews transaction.isActive()");
-				transaction.rollback();
-			}
-		}
-	}
-
-	// News
-	public void showNews() {
-		try {
-			Query query = entityManager.createQuery("select e from News e");
-
-			courseList = (List<News>) query.getResultList();
-			query.getResultList();
-			System.out.println(query.getFirstResult());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-
-	public void saveNews() {
-		EntityTransaction transaction = entityManager.getTransaction();
-
-		try {
-
-			transaction.begin();
-
-			entityManager.persist(_c);
-
-			transaction.commit();
-
-			init();
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-			if (transaction.isActive()) {
-				System.out.println("running .... persistNews transaction.isActive()");
+				System.out.println("running .... persistCourse transaction.isActive()");
 				transaction.rollback();
 			}
 		}
@@ -165,55 +94,126 @@ public class NewsEJB {
 			query.executeUpdate();
 
 			entityManager.getTransaction().commit();
-			entityManager.close();
-
 			init();
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
 
-	public void updatecoba(int news_id, String course_name, String course_duration, String description) {
-		EntityTransaction transaction = entityManager.getTransaction();
-
+	public void updateNews(int id, String newsTitle, String newsContent, 
+			String dateStart, String dateEnd) {
+		
 		try {
-
-			transaction.begin();
-
-			News course = (News) entityManager.find(News.class, news_id);
-			entityManager.find(News.class, news_id);
-			entityManager.createQuery(
-					"update News c set c.course_name = :course_name, c.course_duration = :course_duration, c.description = :description where c.news_id=:news_id")
-					.setParameter("course_name", course_name).setParameter("news_id", news_id)
-					.setParameter("course_duration", course_duration).setParameter("description", description)
-					.executeUpdate();
-			transaction.commit();
-
+			News newsUpdate = new News();
+			newsUpdate =  entityManager.find(News.class, id);
+			
+			Date updateStart = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateStart);
+			Date endStart = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dateEnd);
+			
+			entityManager.getTransaction().begin();
+			
+			newsUpdate.setNews_title(newsTitle);
+			newsUpdate.setNews_content(newsContent);
+			newsUpdate.setOnhomepage(onhomeUpdate);
+			newsUpdate.setStart_date(updateStart);
+			newsUpdate.setEnd_date(endStart);
+			
+			entityManager.getTransaction().commit();
 			init();
-
 		} catch (Exception e) {
-
-			e.printStackTrace();
-
-			if (transaction.isActive()) {
-				System.out.println("running .... persistNews transaction.isActive()");
-				transaction.rollback();
-			}
+			// TODO: handle exception
 		}
+	}
+
+	public void readNews() {
+		try {
+			newses = new ArrayList<News>();
+			Query query = entityManager.createQuery("SELECT x FROM News x");
+			newses = query.getResultList();
+			System.out.println("Iki news ----------------------------- : " + newses);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("Bosokkkk " + e);
+		}
+	}
+	
+	public void bantuUpdate(int id) {
+
+		TypedQuery<News> query = entityManager.createQuery("SELECT s FROM News s where news_id = : newsku",
+				News.class);
+		query.setParameter("newsku", id);
+		updateNewsLur = new News();
+		updateNewsLur = query.getSingleResult();
+		startUpdate = updateNewsLur.getStart_date().toString();
+		endUpdate = updateNewsLur.getEnd_date().toString();
+		init();
+		PrimeFaces current = PrimeFaces.current();
+		current.executeScript("PF('dlg4').show();");
 
 	}
 
-	public void setNews(News e) {
-		this._c = e;
+	public String getStartUpdate() {
+		return startUpdate;
+	}
+
+	public void setStartUpdate(String startUpdate) {
+		this.startUpdate = startUpdate;
+	}
+
+	public String getEndUpdate() {
+		return endUpdate;
+	}
+
+	public void setEndUpdate(String endUpdate) {
+		this.endUpdate = endUpdate;
+	}
+
+	public boolean getOnhomeUpdate() {
+		return onhomeUpdate;
+	}
+
+	public void setOnhomeUpdate(boolean onhomeUpdate) {
+		this.onhomeUpdate = onhomeUpdate;
+	}
+
+	public News getUpdateNewsLur() {
+		return updateNewsLur;
 	}
 
 	public News getNews() {
-
-		return _c;
+		return news;
 	}
 
-	public List<News> getNewsList() {
-		return courseList;
+	public List<News> getNewses() {
+		return newses;
+	}
+
+	public String getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(String startDate) {
+		this.startDate = startDate;
+	}
+
+	public String getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(String endDate) {
+		this.endDate = endDate;
+	}
+
+	public boolean isOnhomePage() {
+		return onhomePage;
+	}
+
+	public void setOnhomePage(boolean onhomePage) {
+		this.onhomePage = onhomePage;
+	}
+
+	public List<String> getOnhome() {
+		return onhome;
 	}
 
 }

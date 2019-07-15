@@ -67,15 +67,6 @@
 							<p:outputLabel value="Student Id: " />
 							<p:inputText value="#{ganti.student_id}"></p:inputText>
 
-							<p:outputLabel for="courseId" value="Course Id: " />
-
-							<h:selectOneMenu id="courseId"
-								value="#{insertStudent.courseUpdate}" style="width:100%">
-								<f:selectItem itemLabel="Select Course" itemValue=""
-									noSelectionOption="true" />
-								<f:selectItems value="#{insertStudent.courses}" />
-							</h:selectOneMenu>
-
 							<p:outputLabel for="semesterId" value="Semester Id: " />
 
 							<h:selectOneMenu id="semesterId"
@@ -107,7 +98,7 @@
 							<p:inputText value="#{ganti.email_id}"></p:inputText>
 
 							<h:commandButton value="Update Student"
-								actionListener="#{insertStudent.updateStudent(ganti.student_id, insertStudent.courseUpdate, insertStudent.semUpdate,
+								actionListener="#{insertStudent.updateStudent(ganti.student_id, insertStudent.semUpdate,
 						ganti.first_name, ganti.middle_name, ganti.last_name, ganti.gender, ganti.address, ganti.contact_no, ganti.email_id)}" />
 
 						</p:panelGrid>

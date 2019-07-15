@@ -19,7 +19,7 @@
 			<p:tab title="EVENT">
 
 				<p:dataTable id="course1" var="course"
-					value="#{eventEJB.courseList}" editable="true"
+					value="#{eventEJB.eventList}" editable="true"
 					style="margin-bottom:20px">
 
 
@@ -78,7 +78,7 @@
 						<p:rowEditor />
 						<h:commandButton id="deleteLink"
 							styleClass="ui-icon ui-icon-trash"
-							actionListener="#{eventEJB.delCourse(course.course_id)}"
+							actionListener="#{eventEJB.delEvent(course.course_id)}"
 							style="margin-left: 8px" />
 					</p:column>
 					<p:column style="width:35px">
@@ -90,10 +90,10 @@
 				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
 
 					<p:outputLabel value="Id: " />
-					<p:inputText value="#{eventEJB.course.event_id}"></p:inputText>
+					<p:inputText value="#{eventEJB.event.event_id}"></p:inputText>
 					
 					<p:outputLabel value="Name: " />
-					<p:inputText value="#{eventEJB.course.event_name}"></p:inputText>
+					<p:inputText value="#{eventEJB.event.event_name}"></p:inputText>
 
 					
 				</p:panelGrid>
@@ -101,7 +101,7 @@
 				<h:commandButton value="Run populate table"
 					actionListener="#{eventEJB.testing()}" />
 				<h:commandButton value="Save"
-					actionListener="#{eventEJB.saveCourse()}" />
+					actionListener="#{eventEJB.saveEvent()}" />
 				<h:commandButton value="Refresh Table"
 					actionListener="#{eventEJB.init()}" />
 

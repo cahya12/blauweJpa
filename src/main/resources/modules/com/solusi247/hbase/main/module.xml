@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<module xmlns="urn:jboss:module:1.3" name="com.solusi247.hbase">
+
+  <resources>
+       
+    <!-- <artifact name="org.apache.hbase:hbase-shaded-client:2.1.2"/> -->
+    <artifact name="com.sun.jersey:jersey-bundle:1.19.4"/>
+    
+    <artifact name="org.slf4j:jcl-over-slf4j:1.7.25"/>
+    <artifact name="org.slf4j:slf4j-api:1.7.25"/>
+      
+    <artifact name="org.jboss.slf4j:slf4j-jboss-logging:1.1.0.Final"/>
+    
+    <artifact name="org.apache.htrace:htrace-core:4.0.0-incubating"/>
+    <artifact name="org.apache.htrace:htrace-core4:4.2.0-incubating"/>
+        
+    </resources>
+    
+      <dependencies>
+        <module name="org.jboss.logging"/>
+    </dependencies>
+    
+</module>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+      
+<h:head>
+</h:head>
+
+<h:body>
+    <h2>PrimeFaces On-Demand Data</h2>
+    <h:form>
+    
+        <p:dataTable var="karyawan"
+                     value="#{karyawanBean.employeeList}"
+                     scrollable="true"
+                     scrollRows="10"
+                     liveScroll="true"
+                     scrollHeight="200"
+                     liveScrollBuffer="1"
+                     style="border:solid 1px #999;">
+                     
+            <p:column headerText="Id">
+                <h:outputText value="#{karyawan.id}"/>
+            </p:column>
+            
+            <p:column headerText="Name">
+                <h:outputText value="#{karyawan.name}"/>
+            </p:column>
+            
+            <p:column headerText="Phone Number">
+                <h:outputText value="#{karyawan.phoneNumber}"/>
+            </p:column>
+            
+            <p:column headerText="Department">
+                <h:outputText value="#{karyawan.dept}"/>
+            </p:column>
+            
+        </p:dataTable>
+        
+    </h:form>
+</h:body>
+
+
+</html>

@@ -1,0 +1,107 @@
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- EXAMPLE-SOURCE-START -->
+
+	<style type="text/css">
+.ui-row-editor .ui-row-editor-pencil {
+	margin-left: 8px;
+}
+</style>
+
+
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+
+		<p:tabView activeIndex="#{tabViewManagedBean.index}">
+
+
+			<p:tab title="Semester">
+
+				<p:panelGrid columns="2" cellpadding="5">
+
+					<p:outputLabel value="Semester ID" />
+					<p:inputText value="#{semesterView.semester.semester_id}"></p:inputText>
+
+					<p:outputLabel for="courseID" value="Course ID" />
+					<h:selectOneMenu id="courseID" value="#{semesterView.courseID}"
+						style="width:100%">
+						<f:selectItem itemLabel="Select Course" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{semesterView.courses}" />
+					</h:selectOneMenu>
+
+					<p:outputLabel value="Semester" />
+					<p:inputText value="#{semesterView.semester.semester}"></p:inputText>
+
+					<h:commandButton value="RESET" type="reset" />
+					<h:commandButton value="INSERT"
+						actionListener="#{semesterView.create()}">
+						<f:actionListener binding="#{semesterView.init()}" />
+					</h:commandButton>
+
+				</p:panelGrid>
+				<br />
+				<br />
+
+				<p:dataTable id="cars1" var="sem" value="#{semesterView.sem}"
+					editable="true" style="margin-bottom:20px">
+					<p:column headerText="Semester ID">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sem.semester_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{sem.semester_id}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Course ID">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sem.course_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:selectOneMenu value="#{sem.course_id}" style="width:100%">
+									<f:selectItems value="#{semesterView.courses}" var="man"
+										itemLabel="#{man}" itemValue="#{man}" />
+								</h:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Semester">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sem.semester}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sem.semester}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column style="width:35px">
+						<p:rowEditor />
+					</p:column>
+					<p:column style="width:60px">
+						<h:commandButton value="U"
+							actionListener="#{semesterView.cobaUpdate(sem.semester_id, sem.course_id, sem.semester)}"></h:commandButton>
+						<h:commandButton value="D"
+							actionListener="#{semesterView.delChy(sem.semester_id)}">
+							<f:actionListener binding="#{semesterView.init()}" />
+						</h:commandButton>
+					</p:column>
+				</p:dataTable>
+
+			</p:tab>
+
+
+		</p:tabView>
+	</h:form>
+
+</ui:composition>

@@ -1,0 +1,142 @@
+<ui:composition
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pe="http://primefaces.org/ui/extensions">
+<!-- EXAMPLE-SOURCE-START -->
+
+<h:form style="width:800px;">
+
+	<p:growl id="message"></p:growl>
+	
+	<p:tabView activeIndex="#{tabViewManagedBean.index}">
+
+			<p:tab title="Tab#1">
+
+				<p:panelGrid columns="2">
+
+					<h:outputText value="serviceName:" />
+					<h:outputText value="#{yarnDataViewBean.serviceName}" />
+
+					<h:outputText value="clusterName:" />
+					<h:outputText value="#{yarnDataViewBean.clusterName}" />
+
+					<h:outputText value="groupName:" />
+					<h:outputText value="#{yarnDataViewBean.groupName}" />
+
+					<h:outputText value="HRefURL:" />
+					<h:outputText value="#{yarnDataViewBean.HRefURL}" />
+
+
+					<h:outputText value="Debug:" />
+					<h:outputText value="#{yarnDataViewBean.getItemsSize()}" />
+
+				</p:panelGrid>
+
+			</p:tab>
+
+		<p:tab title="Tab#2">
+			<p:outputLabel value="Diskfree"></p:outputLabel>
+			
+              <p:chart type="pie"  id="diskfree" 
+                 responsive="true"
+                 model="#{diskfreeBean.model}" />
+                 
+        	<!-- p:poll interval="60" update="diskfree"/  -->
+ 
+		</p:tab>
+		
+		<p:tab title="Tab#3">
+			<p:outputLabel value="Network"></p:outputLabel>
+			
+              <p:chart type="pie"  id="network" 
+                 responsive="true"
+                 model="#{networkBean.model}" />
+                  
+		</p:tab>
+	
+		
+		<p:tab title="Tab#4">
+			<p:outputLabel value="Memory"></p:outputLabel>
+			
+              <p:chart type="pie"  id="memory" 
+                 responsive="true"
+                 model="#{memoryBean.model}" />
+                  
+		</p:tab>	
+		
+		<p:tab title="Memory">
+			<p:outputLabel value="Memory"></p:outputLabel>
+			
+			<p:poll interval="10" update="memory_line" /> 
+			<!-- <p:poll interval="30" name="updateChart" 
+				listener="#{memoryBean.refrishList()}" update="memory_line"/>  -->
+			
+			<!--    actionListener="#{memoryBean.refrishList()}" update="memory_line"/> -->
+           
+			<p:chart type="line" id="memory_line"  model="#{memoryBean.lineModel1}" style="height:300px;"/>
+                  
+		</p:tab>	
+			
+		<p:tab title="Simulator">
+			<p:outputLabel value="Simulator"></p:outputLabel>
+			
+			<p:poll interval="30" update="simulator_line" /> 
+			<!-- <p:poll interval="30" name="updateChart" 
+				listener="#{memoryBean.refrishList()}" update="memory_line"/>  -->
+			
+			<!--    actionListener="#{memoryBean.refrishList()}" update="memory_line"/> -->
+           
+			<p:chart type="line" id="simulator_line"  model="#{memoryBean.lineModel2}" style="height:300px;"/>
+                  
+		</p:tab>	
+			
+		
+		<p:tab title="Tab#5">
+			<p:outputLabel value="OS Data"></p:outputLabel>
+			
+              <p:chart type="pie"  id="osdatabean" 
+                 responsive="true"
+                 model="#{oSDataBean.model}" />
+ 
+		</p:tab>
+		
+		
+		<p:tab title="Tab#6">
+			<p:outputLabel value="Content goes here ! Message #6"></p:outputLabel>
+			
+ 			<p:chart type="pie"  id="dNJvmMetrics" 
+                 responsive="true"
+                 model="#{dNJvmMetrics.model}" />
+			
+		</p:tab>
+		
+		<p:tab title="Tab#9">
+			<p:outputLabel value="Content goes here ! Message # 2"></p:outputLabel>
+			
+			<p:dataTable var="host" value="#{hostView.hosts}">
+			
+			    <p:column headerText="IP">
+			        <h:outputText value="#{host.ipv4}" />
+			    </p:column>
+			 
+			    <p:column headerText="Hostname">
+			        <h:outputText value="#{host.host_name}" />
+			    </p:column>
+			 
+			    <p:column headerText="CPU">
+			        <h:outputText value="#{host.cpu_info}" />
+			    </p:column>
+			 
+			    <p:column headerText="Memory">
+			        <h:outputText value="#{host.total_mem}" />
+			    </p:column>
+			</p:dataTable>
+			
+		</p:tab>
+		
+	</p:tabView>
+</h:form>    
+    
+</ui:composition>

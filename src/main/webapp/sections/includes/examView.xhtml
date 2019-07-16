@@ -1,0 +1,83 @@
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- EXAMPLE-SOURCE-START -->
+
+	<style type="text/css">
+.ui-row-editor .ui-row-editor-pencil {
+	margin-left: 8px;
+}
+</style>
+
+
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+		<p:tabView activeIndex="#{tabViewManagedBean.index}">
+
+			<p:tab title="EXAM">
+
+				<p:dataTable id="course1" var="course"
+					value="#{examEJB.courseList}" editable="true"
+					style="margin-bottom:20px">
+
+
+					<p:column headerText="Id">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{course.exam_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{course.exam_id}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+				
+
+
+					<p:column style="width:35px">
+						<p:rowEditor />
+						<h:commandButton id="deleteLink"
+							styleClass="ui-icon ui-icon-trash"
+							actionListener="#{examEJB.delCourse(course.course_id)}"
+							style="margin-left: 8px" />
+					</p:column>
+					<p:column style="width:35px">
+						<h:commandButton id="updateLink"
+							actionListener="#{examEJB.updatecoba(course.course_id,course.course_name,course.course_duration,course.description)}"></h:commandButton>
+					</p:column>
+				</p:dataTable>
+
+				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
+
+					<p:outputLabel value="Id: " />
+					<p:inputText value="#{examEJB.course.event_id}"></p:inputText>
+
+					<!-- <p:outputLabel value="Name: " />
+					<p:inputText value="#{courseEJB.course.course_name}"></p:inputText>
+
+					<p:outputLabel value="Duration: " />
+					<p:inputText value="#{courseEJB.course.course_duration}"></p:inputText>
+
+					<p:outputLabel value="Description" />
+					<p:inputText value="#{courseEJB.course.description}"></p:inputText>
+ -->
+				</p:panelGrid>
+
+				<h:commandButton value="Run populate table"
+					actionListener="#{examEJB.testing()}" />
+				<h:commandButton value="Save"
+					actionListener="#{examEJB.saveCourse()}" />
+				<h:commandButton value="Refresh Table"
+					actionListener="#{examEJB.init()}" />
+
+
+			</p:tab>
+
+		</p:tabView>
+	</h:form>
+
+</ui:composition>

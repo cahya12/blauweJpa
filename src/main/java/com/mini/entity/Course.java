@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -45,6 +46,15 @@ public class Course implements Serializable {
 
 	public Semester getSemesterFK() {
 		return semester;
+	}
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn 
+//	(name = "exam_id", insertable=false, updatable=false)
+	private Exam courseExam;
+	
+	public void setExam(Exam courseExam) {
+		this.courseExam = courseExam;
 	}
 	
 	

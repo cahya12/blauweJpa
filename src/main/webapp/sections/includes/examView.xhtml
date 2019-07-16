@@ -1,83 +1,173 @@
-<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui"
-	xmlns:pe="http://primefaces.org/ui/extensions">
-	<!-- EXAMPLE-SOURCE-START -->
+<ui:composition
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pe="http://primefaces.org/ui/extensions">
+<!-- EXAMPLE-SOURCE-START -->
 
-	<style type="text/css">
-.ui-row-editor .ui-row-editor-pencil {
-	margin-left: 8px;
-}
+<style type="text/css">
+    .ui-row-editor .ui-row-editor-pencil {
+        margin-left:8px;
+    }
 </style>
-
-
-	<h:form id="form">
-		<p:growl id="msgs" showDetail="true" />
-		<p:tabView activeIndex="#{tabViewManagedBean.index}">
-
-			<p:tab title="EXAM">
-
-				<p:dataTable id="course1" var="course"
-					value="#{examEJB.courseList}" editable="true"
-					style="margin-bottom:20px">
-
-
-					<p:column headerText="Id">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{course.exam_id}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText id="modelInput" value="#{course.exam_id}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
-
+ 
+ 
+ <h:form id="form">
+    <p:growl id="msgs" showDetail="true"/>
+    
+    <p:tabView activeIndex="#{tabViewManagedBean.index}">
+    
+    
+    <p:tab title="EXAM">
+    
+    <h2 style="text-align:center">CREATE DATA EXAM</h2>
+			<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
+				<p:outputLabel value="Exam Id : " />
+				<p:inputText value="#{examEJB.exam.exam_id}"/>
 				
+				<p:outputLabel for="courseIdInput" value="Course Id: " />
+	    
+			    <h:selectOneMenu id="courseIdInput"
+			     value="#{examEJB.courseIdInput}">
+				     <f:selectItem itemLabel="Select Course" itemValue=""
+				      noSelectionOption="true" />
+				     <f:selectItems value="#{examEJB.courses}" />
+			    </h:selectOneMenu>
+				
+				<p:outputLabel for="subjectIdInput" value="Subject Code: " />
+	    
+			    <h:selectOneMenu id="subjectIdInput"
+			     value="#{examEJB.subjectIdInput}">
+				     <f:selectItem itemLabel="Select Subject" itemValue=""
+				      noSelectionOption="true" />
+				     <f:selectItems value="#{examEJB.sub}" />
+			    </h:selectOneMenu>
+				
+				<p:outputLabel for="semesterIdInput" value="Semester ID: " />
+				<h:selectOneMenu id="semesterIdInput"
+			     value="#{examEJB.semesterIdInput}">
+				     <f:selectItem itemLabel="Select Semester" itemValue=""
+				      noSelectionOption="true" />
+				     <f:selectItems value="#{examEJB.semesters}" />
+			    </h:selectOneMenu>
+				
+				<p:outputLabel value="Marks : " />
+				<p:inputText value="#{examEJB.exam.marks}"/>
+				
+				<p:outputLabel value="Date: " />
+					<p:inputText value="#{examEJB.exam.date}" placeholder="dd-MM-yyyy">
+					 	<f:convertDateTime pattern="dd-MM-yyyy"/>
+				</p:inputText>			 
+			</p:panelGrid>
+			
+			<h:commandButton value="Insert Exam"
+			actionListener="#{examEJB.insertExam()}">
+			    <f:actionListener binding="#{examEJB.init()}" />
+			</h:commandButton>
+			<br></br>
+ 
+    <p:dataTable id="cars1" var="car" value="#{examEJB.getAllExam()}" editable="true" style="margin-bottom:20px">
+  
+       <!--  <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}" update="mainForm:form:msgs" />
+        <p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}" update="mainForm:form:msgs" /> -->
+ 
+        <p:column headerText="Evam ID">
+            <p:cellEditor>
+                <f:facet name="output">
+                	<h:outputText value="#{car.exam_id}" />
+                </f:facet>
+                <f:facet name="input">
+                	<p:inputText id="modelInput" value="#{car.exam_id}" style="width:100%"/>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+		
+		<p:column headerText="Course ID">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{car.course_id}" /></f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu value="#{examEJB.courseIdInput}" style="width:100%">
+                        <f:selectItems value="#{examEJB.courses}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Subject Code">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{car.subject_code}" /></f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu value="#{examEJB.subjectIdInput}" style="width:100%">
+                        <f:selectItems value="#{examEJB.sub}" var="man2" itemLabel="#{man2}" itemValue="#{man2}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+        
+        <p:column headerText="Semester ID">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{car.semesterExam.semester_id}" /></f:facet>
+                <f:facet name="input">
+                    <h:selectOneMenu value="#{examEJB.semesterIdInput}" style="width:100%">
+                        <f:selectItems value="#{examEJB.semesters}" var="man" itemLabel="#{man}" itemValue="#{man}" />
+                    </h:selectOneMenu>
+                </f:facet>
+            </p:cellEditor>
+        </p:column>
+ 
+		<p:column headerText="Marks">
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{car.marks}" />
+				</f:facet>
+				<f:facet name="input">
+					<p:inputText value="#{car.marks}"
+					style="width:100%" />
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		
+		<p:column headerText="Date">
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{car.date}" />
+				</f:facet>
+				<f:facet name="input">
+					<p:inputText value="#{car.date}"
+					style="width:100%" />
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
+		
+		<p:column headerText="Time">
+			<p:cellEditor>
+				<f:facet name="output">
+					<h:outputText value="#{car.time}" />
+				</f:facet>
+				<f:facet name="input">
+					<p:inputText value="#{car.time}"
+					style="width:100%" />
+				</f:facet>
+			</p:cellEditor>
+		</p:column>
 
-
-					<p:column style="width:35px">
-						<p:rowEditor />
-						<h:commandButton id="deleteLink"
-							styleClass="ui-icon ui-icon-trash"
-							actionListener="#{examEJB.delCourse(course.course_id)}"
-							style="margin-left: 8px" />
-					</p:column>
-					<p:column style="width:35px">
-						<h:commandButton id="updateLink"
-							actionListener="#{examEJB.updatecoba(course.course_id,course.course_name,course.course_duration,course.description)}"></h:commandButton>
-					</p:column>
-				</p:dataTable>
-
-				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
-
-					<p:outputLabel value="Id: " />
-					<p:inputText value="#{examEJB.course.event_id}"></p:inputText>
-
-					<!-- <p:outputLabel value="Name: " />
-					<p:inputText value="#{courseEJB.course.course_name}"></p:inputText>
-
-					<p:outputLabel value="Duration: " />
-					<p:inputText value="#{courseEJB.course.course_duration}"></p:inputText>
-
-					<p:outputLabel value="Description" />
-					<p:inputText value="#{courseEJB.course.description}"></p:inputText>
- -->
-				</p:panelGrid>
-
-				<h:commandButton value="Run populate table"
-					actionListener="#{examEJB.testing()}" />
-				<h:commandButton value="Save"
-					actionListener="#{examEJB.saveCourse()}" />
-				<h:commandButton value="Refresh Table"
-					actionListener="#{examEJB.init()}" />
-
-
-			</p:tab>
-
-		</p:tabView>
-	</h:form>
-
+ 
+        <p:column style="width:35px">
+            <p:rowEditor />
+        </p:column>
+        <p:column>
+			<h:commandButton value="Update"
+				actionListener="#{examEJB.Update(car.exam_id, car.course_id, car.semester_id, car.subject_code, car.marks, car.date, car.time)}" />
+			<h:commandButton value="Delete"
+				actionListener="#{examEJB.getDelete(car.exam_id)}" />
+		</p:column>
+        
+    </p:dataTable>
+    
+    </p:tab>
+    
+    </p:tabView>
+ </h:form>
+    
 </ui:composition>

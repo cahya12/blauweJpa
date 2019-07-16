@@ -1,20 +1,28 @@
 package com.mini.ejb;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
-import javax.persistence.*;
-import javax.tools.JavaCompiler.CompilationTask;
-import javax.transaction.Transactional;
-import com.mini.entity.Event;
-import com.mini.entity.Event;
-
-import java.sql.Date;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+
+import org.primefaces.PrimeFaces;
+import org.primefaces.event.RowEditEvent;
+
+import com.mini.entity.Event;
 
 @Named
 @ApplicationScoped
@@ -22,199 +30,173 @@ public class EventEJB {
 	private static final Logger LOGGER = Logger.getLogger("JPA");
 	static EntityManagerFactory factory = null;
 	static EntityManager entityManager = null;
-	static int counter = 102;
-
-	Event _c = new Event();
-	List<Event> eventList = new ArrayList<Event>();
-
-	@SuppressWarnings("unchecked")
+	
+	Event ev = new Event();
+	String start_date,end_date;
+	
 	@PostConstruct
-	public void init() {
-
+	public void initiate() {
+		
 		try {
-
-			System.out.println("running .... ");
-
+			
+			System.out.println( "running .... ");
+			
+			
 			factory = Persistence.createEntityManagerFactory("TrainingUnit");
-
+			
 			entityManager = factory.createEntityManager();
-
-			System.out.println("running .... 123");
-
-			System.out.println("running .... 2");
-
-			showEvent();
-
-			System.out.println("Running ..... 3");
-
+			
+			System.out.println( "running .... 1");
+			
+			System.out.println( "running .... 2");
+			
 		} catch (Exception e) {
 			LOGGER.log(Level.SEVERE, e.getMessage(), e);
 			e.printStackTrace();
-
+			
 		} finally {
-
+		
+			
 		}
 	}
-
-	public void testing() {
-
-		try {
-			System.out.println("running .... persistEvent 1");
-
-			persistEvent(entityManager);
-
-			System.out.println("running .... persistEvent 2");
-
-		} catch (Exception e) {
-			// LOGGER.log(Level.SEVERE, e.getMessage(), e);
-
-			System.out.println(e.getMessage());
-
-			e.printStackTrace();
-
-		}
-	}
-
+	
 	@PreDestroy
 	public void destroyrun() {
-
+		
+		
 		if (entityManager != null) {
 			entityManager.close();
 		}
-
+		
 		if (factory != null) {
 			factory.close();
 		}
 	}
-
-	private void persistEvent(EntityManager entityManager) {
+	
+	public void saveCourse() {
 		EntityTransaction transaction = entityManager.getTransaction();
-
+		
 		try {
-
+			
 			transaction.begin();
-
-			Event c = new Event();
-
-			c.setEvent_id(counter++);
-			c.setEvent_name("MGDG");
-
-			entityManager.persist(c);
-
+			entityManager.persist(ev);
 			transaction.commit();
-
+			initiate();
 		} catch (Exception e) {
-
+			
 			e.printStackTrace();
-
+			
+			
 			if (transaction.isActive()) {
-				System.out.println("running .... persistEvent transaction.isActive()");
+				System.out.println( "running .... persistCourse transaction.isActive()");
 				transaction.rollback();
 			}
 		}
 	}
+	
+	
+	
+	public static List getAllEvent() {
+		Query query2 = entityManager.createQuery("Select e from Event e");
+		List allEvent = query2.getResultList();
+		if (allEvent != null && allEvent.size() > 0) {           
+            return allEvent;
+        } else {
+            return null;
+        }
+	}
+	
+	public void getDelete(int event_id) {
 
-	// Event
-	public void showEvent() {
-		try {
-			Query query = entityManager.createQuery("select e from Event e");
+		  EntityManager em = factory.createEntityManager();
+		  em.getTransaction().begin();
 
-			eventList = (List<Event>) query.getResultList();
-			query.getResultList();
-			System.out.println(query.getFirstResult());
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		  // do something ...
+
+		  // add this if you fetched the Book entity in this session
+		  em.flush();
+		  em.clear();
+
+		  Query query = em.createQuery("DELETE Event s WHERE event_id = :event_id");
+		  query.setParameter("event_id", event_id);
+		  query.executeUpdate();
+
+		  em.getTransaction().commit();
+		  em.close();
+
+		  initiate();
+	}
+	
+//	public void Update(int event_id, String event_name, Date start_date, Date end_date) {
+//		EntityManager em = factory.createEntityManager();
+//		
+//			em.getTransaction().begin();
+//			
+//			Query queryUpdate=em.createQuery("UPDATE EVENT SET event_id = :event_id,"
+//					+ "event_name = :event_name, start_date = :start_date, end_date = :end_date WHERE event_id = :event_id");
+//			queryUpdate.setParameter("event_id", event_id).setParameter("event_name", event_name).setParameter("start_date", start_date)
+//			.setParameter("end_date", end_date);
+//			
+//			queryUpdate.executeUpdate();
+//			em.getTransaction().commit();
+//			
+//			initiate();
+//
+//	}
+	
+	public void Update(int event_id, String event_name, String start, String end) {
+		 try {
+			   Event eventUpdate = new Event();
+			   eventUpdate =  entityManager.find(Event.class, event_id);
+			   
+			   Date startDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(start);
+			   Date endDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(end);
+			   
+			   entityManager.getTransaction().begin();
+			   
+			   eventUpdate.setEvent_id(event_id);
+			   eventUpdate.setEvent_name(event_name);;
+			   eventUpdate.setStart_date(startDate);
+			   eventUpdate.setEnd_date(endDate);
+			   
+			   
+			   entityManager.getTransaction().commit();
+			   initiate();
+			  } catch (Exception e) {
+			   // TODO: handle exception
+			  }
+	}
+	
+	public void updateDate(int event_id) {
+		 TypedQuery<Event> query = entityManager.createQuery("SELECT s FROM Event s where event_id = : event_id",
+				    Event.class);
+				  query.setParameter("event_id",event_id);
+				  Event updateEvent = new Event();
+				  updateEvent = query.getSingleResult();
+				  start_date = updateEvent.getStart_date().toString();
+				  end_date = updateEvent.getEnd_date().toString();
+				  initiate();
+				  PrimeFaces current = PrimeFaces.current();
+				  current.executeScript("PF('dlg4').show();");
+	}
+	
+	public void onRowEdit(RowEditEvent event) {
+		FacesMessage msg = new FacesMessage("Feedback Edited");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
-	public void saveEvent() {
-		EntityTransaction transaction = entityManager.getTransaction();
-
-		try {
-
-			transaction.begin();
-
-			entityManager.persist(_c);
-
-			transaction.commit();
-
-			init();
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-			if (transaction.isActive()) {
-				System.out.println("running .... persistEvent transaction.isActive()");
-				transaction.rollback();
-			}
-		}
-	}
-
-	public void delEvent(int id) {
-		try {
-			entityManager.getTransaction().begin();
-
-			// do something ...
-
-			// add this if you fetched the Book entity in this session
-			entityManager.flush();
-			entityManager.clear();
-
-			Query query = entityManager.createQuery("DELETE Event b WHERE event_id = :event_id");
-			query.setParameter("event_id", id);
-			query.executeUpdate();
-
-			entityManager.getTransaction().commit();
-			entityManager.close();
-
-			init();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-
-	public void updatecoba(int event_id, String event_name, Date event_duration, Date description) {
-		EntityTransaction transaction = entityManager.getTransaction();
-
-		try {
-
-			transaction.begin();
-
-			Event event = (Event) entityManager.find(Event.class, event_id);
-			entityManager.find(Event.class, event_id);
-			entityManager.createQuery(
-					"update Event c set c.event_name = :event_name, c.event_duration = :event_duration, c.description = :description where c.event_id=:event_id")
-					.setParameter("event_name", event_name).setParameter("event_id", event_id)
-					.setParameter("event_duration", event_duration).setParameter("description", description)
-					.executeUpdate();
-			transaction.commit();
-
-			init();
-
-		} catch (Exception e) {
-
-			e.printStackTrace();
-
-			if (transaction.isActive()) {
-				System.out.println("running .... persistEvent transaction.isActive()");
-				transaction.rollback();
-			}
-		}
-
-	}
-
-	public void setEvent(Event e) {
-		this._c = e;
+	public void onRowCancel(RowEditEvent event) {
+		FacesMessage msg = new FacesMessage("Edit Cancelled");
+		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 
 	public Event getEvent() {
-
-		return _c;
+		return ev;
 	}
 
-	public List<Event> getEventList() {
-		return eventList;
+	public void setEvent(Event ev) {
+		this.ev = ev;
 	}
+	
 
 }

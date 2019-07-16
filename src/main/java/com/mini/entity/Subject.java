@@ -43,6 +43,15 @@ public class Subject implements Serializable {
 	// @Column(table = "tbl_semester")
 	int semester_id;
 	String subject_name;
+	
+	@ManyToOne (cascade = CascadeType.ALL)
+	@JoinColumn 
+//	(name = "exam_id", insertable=false, updatable=false)
+	private Exam subjectExam;
+	
+	public void setExam(Exam exam) {
+		this.subjectExam = exam;
+	}
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn 

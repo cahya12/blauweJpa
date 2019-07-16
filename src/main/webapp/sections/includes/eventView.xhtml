@@ -14,99 +14,107 @@
 
 	<h:form id="form">
 		<p:growl id="msgs" showDetail="true" />
+
 		<p:tabView activeIndex="#{tabViewManagedBean.index}">
 
+
 			<p:tab title="EVENT">
-
-				<p:dataTable id="course1" var="course"
-					value="#{eventEJB.eventList}" editable="true"
-					style="margin-bottom:20px">
-
-
-					<p:column headerText="Id">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{course.event_id}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText id="modelInput" value="#{course.event_id}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
+			
+				<h2 style="text-align:center">CREATE DATA EVENT</h2>
+				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
+							
+					<p:outputLabel value="Event Id: " />
+					<p:inputText value="#{eventEJB.event.event_id}"/>
 					
-					<p:column headerText="Name">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{course.event_name}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{course.event_name}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
+					<p:outputLabel value="Event Name: " />
+					<p:inputText value="#{eventEJB.event.event_name}"/>
 					
-					<p:column headerText="start date">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{course.start_date}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{course.start_date}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
-					
-					<p:column headerText="end date">
-						<p:cellEditor>
-							<f:facet name="output">
-								<h:outputText value="#{course.end_date}" />
-							</f:facet>
-							<f:facet name="input">
-								<p:inputText value="#{course.end_date}"
-									style="width:100%" />
-							</f:facet>
-						</p:cellEditor>
-					</p:column>
-
+					<p:outputLabel value="Start Date: " />
+					<p:inputText value="#{eventEJB.event.start_date}" placeholder="dd-MM-yyyy">
+					 	<f:convertDateTime pattern="dd-MM-yyyy"/>
+					</p:inputText>				
+								
+					<p:outputLabel value="End Date: " />
+					<p:inputText value="#{eventEJB.event.end_date}" placeholder="dd-MM-yyyy">
+					 	<f:convertDateTime pattern="dd-MM-yyyy"/>
+					</p:inputText>	
+								 
+				</p:panelGrid>
+						
+				<h:commandButton value="Save" actionListener="#{eventEJB.saveCourse()}" />
 				
+								
+
+				<p:dataTable id="cars1" var="car" value="#{eventEJB.getAllEvent()}"
+					editable="true" style="margin-bottom:20px">
+
+					<!-- <p:ajax event="rowEdit" listener="#{dtEditView.onRowEdit}"
+						update="mainForm:form:msgs" />
+					<p:ajax event="rowEditCancel" listener="#{dtEditView.onRowCancel}"
+						update="mainForm:form:msgs" /> -->
+
+					<p:column headerText="Event ID">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.event_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{car.event_id}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Event Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.event_name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.event_name}" style="width:100%" label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Start Date">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.start_date}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.start_date}" style="width:100%" label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="End Date">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.end_date}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.end_date}" style="width:100%" label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
 
 
 					<p:column style="width:35px">
 						<p:rowEditor />
-						<h:commandButton id="deleteLink"
-							styleClass="ui-icon ui-icon-trash"
-							actionListener="#{eventEJB.delEvent(course.course_id)}"
-							style="margin-left: 8px" />
 					</p:column>
-					<p:column style="width:35px">
-						<h:commandButton id="updateLink"
-							actionListener="#{eventEJB.updatecoba(course.course_id,course.course_name,course.course_duration,course.description)}"></h:commandButton>
+					<p:column>
+						<h:commandButton value="Update"
+							actionListener="#{eventEJB.Update(car.event_id, car.event_name, car.start_date, car.end_date)}" />
+						<h:commandButton value="Delete"
+							actionListener="#{eventEJB.getDelete(car.event_id)}" />
 					</p:column>
 				</p:dataTable>
 
-				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
-
-					<p:outputLabel value="Id: " />
-					<p:inputText value="#{eventEJB.event.event_id}"></p:inputText>
-					
-					<p:outputLabel value="Name: " />
-					<p:inputText value="#{eventEJB.event.event_name}"></p:inputText>
-
-					
-				</p:panelGrid>
-
-				<h:commandButton value="Run populate table"
-					actionListener="#{eventEJB.testing()}" />
-				<h:commandButton value="Save"
-					actionListener="#{eventEJB.saveEvent()}" />
-				<h:commandButton value="Refresh Table"
-					actionListener="#{eventEJB.init()}" />
-
-
 			</p:tab>
+
+
+
+
 
 		</p:tabView>
 	</h:form>

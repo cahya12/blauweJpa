@@ -37,6 +37,29 @@ public class Semester implements Serializable {
 	String semester;
 	@OneToMany(mappedBy = "semesterSaya")
 	private Set<Student> student = new HashSet<Student>();
+	
+	@OneToMany(mappedBy = "semester", cascade = CascadeType.ALL)
+	private Set<Course> c = new HashSet<Course>();
+	
+	@OneToMany(mappedBy = "semSubject", cascade = CascadeType.ALL)
+	private Set<Subject> s = new HashSet<Subject>();
+	
+	public Set<Subject> getSemSubject() {
+		return s;
+	}
+	
+	public void setStudents(Set<Subject> subject) {
+		this.s = subject;
+	}
+	
+	public Set<Course> getCourse() {
+		return c;
+	}
+	
+	public void setCourse(Course course) {
+		this.c = Stream.of(course).collect(Collectors.toSet());
+        this.c.forEach(x -> x.setSemesterFK(this));
+	}
 
 	public Set<Student> getStudent() {
 		return student;

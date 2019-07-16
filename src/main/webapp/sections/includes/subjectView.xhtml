@@ -14,69 +14,94 @@
 
 	<h:form id="form">
 		<p:growl id="msgs" showDetail="true" />
+
 		<p:tabView activeIndex="#{tabViewManagedBean.index}">
 
-			<p:tab title="EVENT">
-
-				<p:dataTable id="course1" var="course"
-					value="#{eventEJB.courseList}" editable="true"
-					style="margin-bottom:20px">
 
 
-					<p:column headerText="Id">
+
+			<p:tab title="Subject">
+
+				<p:panelGrid columns="2" cellpadding="5">
+
+					<p:outputLabel value="Subject Code" />
+					<p:inputText value="#{subjectView.sub.subject_code}"></p:inputText>
+
+					<p:outputLabel for="semesterID" value="Semester ID" />
+					<h:selectOneMenu id="semesterID" value="#{subjectView.semesterID}"
+						style="width:100%">
+						<f:selectItem itemLabel="Select Semester" itemValue=""
+							noSelectionOption="true" />
+						<f:selectItems value="#{subjectView.sem}" />
+					</h:selectOneMenu>
+
+					<p:outputLabel value="Subject Name" />
+					<p:inputText value="#{subjectView.sub.subject_name}"></p:inputText>
+
+					<p:outputLabel value="Semester ID" />
+					<p:inputText value="#{subjectView.sub.semester_id}"></p:inputText>
+
+					<h:commandButton value="RESET" type="reset" />
+					<h:commandButton value="INSERT"
+						actionListener="#{subjectView.createSubject()}">
+						<f:actionListener binding="#{subjectView.initial()}" />
+					</h:commandButton>
+				</p:panelGrid>
+
+				<br />
+				<br />
+
+				<p:dataTable id="cars2" var="sem" value="#{subjectView.subject}"
+					editable="true" style="margin-bottom:20px">
+					<p:column headerText="Subject Code">
 						<p:cellEditor>
 							<f:facet name="output">
-								<h:outputText value="#{course.event_id}" />
+								<h:outputText value="#{sem.subject_code}" />
 							</f:facet>
 							<f:facet name="input">
-								<p:inputText id="modelInput" value="#{course.event_id}"
+								<p:inputText id="modelInput" value="#{sem.subject_code}"
 									style="width:100%" />
 							</f:facet>
 						</p:cellEditor>
 					</p:column>
 
-				
+					<p:column headerText="Semester ID">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sem.semester_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<h:selectOneMenu value="#{sem.semester_id}" style="width:100%">
+									<f:selectItems value="#{subjectView.sem}" var="man"
+										itemLabel="#{man}" itemValue="#{man}" />
+								</h:selectOneMenu>
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
 
+					<p:column headerText="Subject Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{sem.subject_name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{sem.subject_name}" style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
 
 					<p:column style="width:35px">
 						<p:rowEditor />
-						<h:commandButton id="deleteLink"
-							styleClass="ui-icon ui-icon-trash"
-							actionListener="#{eventEJB.delCourse(course.course_id)}"
-							style="margin-left: 8px" />
 					</p:column>
-					<p:column style="width:35px">
-						<h:commandButton id="updateLink"
-							actionListener="#{eventEJB.updatecoba(course.course_id,course.course_name,course.course_duration,course.description)}"></h:commandButton>
+					<p:column style="width:60px">
+						<h:commandButton value="U"
+							actionListener="#{subjectView.updateSub(sem.subject_code, sem.semester_id, sem.subject_name)}"></h:commandButton>
+						<h:commandButton value="D"
+							actionListener="#{subjectView.deleteSub(sem.subject_code)}"></h:commandButton>
 					</p:column>
 				</p:dataTable>
 
-				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
-
-					<p:outputLabel value="Id: " />
-					<p:inputText value="#{eventEJB.course.event_id}"></p:inputText>
-
-					<!-- <p:outputLabel value="Name: " />
-					<p:inputText value="#{courseEJB.course.course_name}"></p:inputText>
-
-					<p:outputLabel value="Duration: " />
-					<p:inputText value="#{courseEJB.course.course_duration}"></p:inputText>
-
-					<p:outputLabel value="Description" />
-					<p:inputText value="#{courseEJB.course.description}"></p:inputText>
- -->
-				</p:panelGrid>
-
-				<h:commandButton value="Run populate table"
-					actionListener="#{eventEJB.testing()}" />
-				<h:commandButton value="Save"
-					actionListener="#{eventEJB.saveCourse()}" />
-				<h:commandButton value="Refresh Table"
-					actionListener="#{eventEJB.init()}" />
-
-
 			</p:tab>
-
 		</p:tabView>
 	</h:form>
 

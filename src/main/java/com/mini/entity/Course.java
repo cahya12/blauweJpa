@@ -6,7 +6,9 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /* 
@@ -32,6 +34,18 @@ public class Course implements Serializable {
 	String description;
 	@ManyToMany(mappedBy = "courseSaya")
 	private Set<Student> studentSaya = new HashSet<>();
+	
+	@ManyToOne
+	@JoinColumn
+	private Semester semester;
+	
+	public void setSemesterFK(Semester semester) {
+        this.semester = semester;
+    }
+
+	public Semester getSemesterFK() {
+		return semester;
+	}
 	
 	
 	public int getCourse_id() {

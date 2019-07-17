@@ -1,0 +1,165 @@
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- EXAMPLE-SOURCE-START -->
+
+	<style type="text/css">
+.ui-row-editor .ui-row-editor-pencil {
+	margin-left: 8px;
+}
+</style>
+		<p:tabView activeIndex="#{tabViewManagedBean.index}">
+
+			<p:tab title="Student">
+
+				<p:panel id="ShowStudent" header="Isi Tabel Student"
+					style="width:100%">
+					<p:dataTable value="#{insertStudent.students}" var="murid">
+						<!-- 					<p:repeat value="#{murid.courseSaya}" var="corse_"> -->
+						<p:column headerText=" FirstName">
+							<h:outputText value="#{murid.first_name}" />
+						</p:column>
+						<p:column headerText="Middle Name">
+							<h:outputText value="#{murid.middle_name}" />
+						</p:column>
+						<p:column headerText="Last Name">
+							<h:outputText value="#{murid.last_name}" />
+						</p:column>
+						<p:column headerText="Gender">
+							<h:outputText value="#{murid.gender}" />
+						</p:column>
+						<p:column headerText="Address">
+							<h:outputText value="#{murid.address}" />
+						</p:column>
+						<p:column headerText="Contact No">
+							<h:outputText value="#{murid.contact_no}" />
+						</p:column>
+						<p:column headerText="Email">
+							<h:outputText value="#{murid.email_id}" />
+						</p:column>
+						<p:column headerText="Semester">
+							<h:outputText value="#{murid.semesterSaya.semester}" />
+						</p:column>
+						<p:column headerText="Action">
+							<h:commandButton id="deleteLink"
+								action="#{insertStudent.delStudent(murid.student_id)}"
+								style="margin: 5px; width:80%" value="Delete">
+							</h:commandButton>
+							<h:commandButton id="updateLink"
+								actionListener="#{insertStudent.bantuUpdate(murid.student_id)}"
+								style="margin: 5px; width:80%" value="Update">
+							</h:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+
+				<h:commandButton value="refresh"
+					actionListener="#{insertStudent.initiate()}" />
+
+				<p:dialog header="Update Student" widgetVar="dlg2" minHeight="40">
+
+					<p:repeat value="#{insertStudent.bantuGanti}" var="ganti">
+						<p:panelGrid columns="2" cellpadding="2" cellspacing="2"
+							style="width:100%">
+							<p:outputLabel value="Student Id: " />
+							<p:inputText value="#{ganti.student_id}"></p:inputText>
+
+							<p:outputLabel for="semesterId" value="Semester Id: " />
+
+							<h:selectOneMenu id="semesterId"
+								value="#{insertStudent.semUpdate}" style="width:100%">
+								<f:selectItem itemLabel="Select Semester" itemValue=""
+									noSelectionOption="true" />
+								<f:selectItems value="#{insertStudent.semesters}" />
+							</h:selectOneMenu>
+
+							<p:outputLabel value="First Name: " />
+							<p:inputText value="#{ganti.first_name}"></p:inputText>
+
+							<p:outputLabel value="Middle Name: " />
+							<p:inputText value="#{ganti.middle_name}"></p:inputText>
+
+							<p:outputLabel value="Last Name: " />
+							<p:inputText value="#{ganti.last_name}"></p:inputText>
+
+							<p:outputLabel value="Gender: " />
+							<p:inputText value="#{ganti.gender}"></p:inputText>
+
+							<p:outputLabel value="Address: " />
+							<p:inputText value="#{ganti.address}"></p:inputText>
+
+							<p:outputLabel value="Contact No: " />
+							<p:inputText value="#{ganti.contact_no}"></p:inputText>
+
+							<p:outputLabel value="Email Id: " />
+							<p:inputText value="#{ganti.email_id}"></p:inputText>
+
+							<h:commandButton value="Update Student"
+								actionListener="#{insertStudent.updateStudent(ganti.student_id, insertStudent.semUpdate,
+						ganti.first_name, ganti.middle_name, ganti.last_name, ganti.gender, ganti.address, ganti.contact_no, ganti.email_id)}" />
+
+						</p:panelGrid>
+					</p:repeat>
+				</p:dialog>
+
+				<p:dialog header="Insert Student" widgetVar="dlg1" minHeight="40">
+					<p:panelGrid columns="2" cellpadding="2" cellspacing="2"
+						style="width:100%">
+						<p:outputLabel value="Student Id: " />
+						<p:inputText value="#{insertStudent.student.student_id}"></p:inputText>
+
+						<p:outputLabel for="courseIdInput" value="Course Id: " />
+
+						<h:selectOneMenu id="courseIdInput"
+							value="#{insertStudent.courseIdInput}" style="width:100%">
+							<f:selectItem itemLabel="Select Course" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{insertStudent.courses}" />
+						</h:selectOneMenu>
+
+						<p:outputLabel for="semesterIdInput" value="Semester Id: " />
+
+						<h:selectOneMenu id="semesterIdInput"
+							value="#{insertStudent.semesterIdInput}" style="width:100%">
+							<f:selectItem itemLabel="Select Semester" itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{insertStudent.semesters}" />
+						</h:selectOneMenu>
+
+						<p:outputLabel value="First Name: " />
+						<p:inputText value="#{insertStudent.student.first_name}"></p:inputText>
+
+						<p:outputLabel value="Middle Name: " />
+						<p:inputText value="#{insertStudent.student.middle_name}"></p:inputText>
+
+						<p:outputLabel value="Last Name: " />
+						<p:inputText value="#{insertStudent.student.last_name}"></p:inputText>
+
+						<p:outputLabel value="Gender: " />
+						<p:inputText value="#{insertStudent.student.gender}"></p:inputText>
+
+						<p:outputLabel value="Address: " />
+						<p:inputText value="#{insertStudent.student.address}"></p:inputText>
+
+						<p:outputLabel value="Contact No: " />
+						<p:inputText value="#{insertStudent.student.contact_no}"></p:inputText>
+
+						<p:outputLabel value="Email Id: " />
+						<p:inputText value="#{insertStudent.student.email_id}"></p:inputText>
+					</p:panelGrid>
+					<h:commandButton value="Insert Student"
+						actionListener="#{insertStudent.insertStudent()}">
+						<f:actionListener binding="#{insertStudent.initiate()}" />
+					</h:commandButton>
+				</p:dialog>
+
+				<p:commandButton value="Insert Student" type="button"
+					onclick="PF('dlg1').show();" />
+
+			</p:tab>
+
+		</p:tabView>
+</ui:composition>

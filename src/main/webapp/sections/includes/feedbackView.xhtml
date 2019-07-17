@@ -1,0 +1,83 @@
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- EXAMPLE-SOURCE-START -->
+
+	<style type="text/css">
+.ui-row-editor .ui-row-editor-pencil {
+	margin-left: 8px;
+}
+</style>
+
+
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+		<p:tabView activeIndex="#{tabViewManagedBean.index}">
+
+			<p:tab title="FEEDBACK">
+
+				<p:dataTable id="feedback1" var="feedback"
+					value="#{feedbackEJB.feedbackList}" editable="true"
+					style="margin-bottom:20px">
+
+
+					<p:column headerText="Id">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{feedback.feedback_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{feedback.feedback_id}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+				
+
+
+					<p:column style="width:35px">
+						<p:rowEditor />
+						<h:commandButton id="deleteLink"
+							styleClass="ui-icon ui-icon-trash"
+							actionListener="#{eventEJB.delCourse(feedback.feedback_id)}"
+							style="margin-left: 8px" />
+					</p:column>
+					<p:column style="width:35px">
+						<h:commandButton id="updateLink"
+							actionListener="#{eventEJB.updatecoba(feedback.feedback_id,feedback.feedback_name,feedback.feedback_duration,feedback.description)}"></h:commandButton>
+					</p:column>
+				</p:dataTable>
+
+				<p:panelGrid columns="2" cellpadding="2" cellspacing="2">
+
+					<p:outputLabel value="Id: " />
+					<p:inputText value="#{eventEJB.feedback.event_id}"></p:inputText>
+
+					<!-- <p:outputLabel value="Name: " />
+					<p:inputText value="#{feedbackEJB.feedback.feedback_name}"></p:inputText>
+
+					<p:outputLabel value="Duration: " />
+					<p:inputText value="#{feedbackEJB.feedback.feedback_duration}"></p:inputText>
+
+					<p:outputLabel value="Description" />
+					<p:inputText value="#{feedbackEJB.feedback.description}"></p:inputText>
+ -->
+				</p:panelGrid>
+
+				<h:commandButton value="Run populate table"
+					actionListener="#{eventEJB.testing()}" />
+				<h:commandButton value="Save"
+					actionListener="#{eventEJB.saveCourse()}" />
+				<h:commandButton value="Refresh Table"
+					actionListener="#{eventEJB.init()}" />
+
+
+			</p:tab>
+
+		</p:tabView>
+	</h:form>
+
+</ui:composition>

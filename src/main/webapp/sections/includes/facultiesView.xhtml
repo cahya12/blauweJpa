@@ -1,0 +1,237 @@
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+	<!-- EXAMPLE-SOURCE-START -->
+
+	<style type="text/css">
+.ui-row-editor .ui-row-editor-pencil {
+	margin-left: 8px;
+}
+</style>
+
+
+	<h:form id="form">
+		<p:growl id="msgs" showDetail="true" />
+
+		<p:tabView activeIndex="#{tabViewManagedBean.index}">
+
+			<p:tab title="Faculties">
+
+				<p:panelGrid columns="2" cellpadding="2" cellspacing="2" id="fd1">
+
+					<p:outputLabel value="faculty_id" />
+					<p:inputText value="#{miniProjectFaculties.f2.faculty_id}"></p:inputText>
+
+					<p:outputLabel value="first_name" />
+					<p:inputText value="#{miniProjectFaculties.f2.first_name}"></p:inputText>
+
+					<p:outputLabel value="middle_name" />
+					<p:inputText value="#{miniProjectFaculties.f2.middle_name}"></p:inputText>
+
+					<p:outputLabel value="last_name" />
+					<p:inputText value="#{miniProjectFaculties.f2.last_name}"></p:inputText>
+
+					<p:outputLabel value="address" />
+					<p:inputText value="#{miniProjectFaculties.f2.address}"></p:inputText>
+
+					<p:outputLabel value="designation" />
+					<p:inputText value="#{miniProjectFaculties.f2.designation}"></p:inputText>
+
+					<p:outputLabel value="course_id" />
+					<p:inputText value="#{miniProjectFaculties.f2.course_id}"></p:inputText>
+
+					<p:outputLabel value="faculty_type" />
+					<p:inputText value="#{miniProjectFaculties.f2.faculty_type}"></p:inputText>
+				</p:panelGrid>
+				<br />
+				<h:commandButton value="Create Faculties"
+					actionListener="#{miniProjectFaculties.insertFaculty()}"
+					update="mainForm:form:fd1" />
+
+			</p:tab>
+
+			<p:tab title="Result">
+
+				<p:dataTable var="fakultas" value="#{miniProjectFaculties.allData}">
+
+					<p:column headerText="Faculty Id">
+
+						<h:outputText value="#{fakultas.faculty_id}" />
+					</p:column>
+
+					<p:column headerText=" First Name">
+
+						<h:outputText value="#{fakultas.first_name}" />
+					</p:column>
+
+					<p:column headerText="Middle Name">
+
+						<h:outputText value="#{fakultas.middle_name}" />
+					</p:column>
+
+					<p:column headerText="Last Name">
+
+						<h:outputText value="#{fakultas.last_name}" />
+					</p:column>
+
+					<p:column headerText="Address">
+
+						<h:outputText value="#{fakultas.address}" />
+					</p:column>
+
+					<p:column headerText="Designation">
+
+						<h:outputText value="#{fakultas.designation}" />
+					</p:column>
+
+					<p:column headerText="Course id">
+
+						<h:outputText value="#{fakultas.course_id}" />
+					</p:column>
+
+					<p:column headerText="Faculty type">
+
+						<h:outputText value="#{fakultas.faculty_type}" />
+					</p:column>
+
+					<p:column>
+						<h:commandButton value="delete"
+							actionListener="#{miniProjectFaculties.deleteTopic(fakultas.faculty_id)}" />
+					</p:column>
+				</p:dataTable>
+			</p:tab>
+
+
+			<p:tab title="Update">
+
+				<p:dataTable id="cars1" var="car"
+					value="#{miniProjectFaculties.allData}" editable="true"
+					style="margin-bottom:20px">
+
+					<p:ajax event="rowEdit"
+						listener="#{miniProjectFaculties.onRowEdit}"
+						update="mainForm:form:msgs" icon="ui-icon-check" />
+					<p:ajax event="rowEditCancel"
+						listener="#{miniProjectFaculties.onRowCancel}"
+						update="mainForm:form:msgs" />
+
+					<p:column headerText="Faculty Id">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.faculty_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText id="modelInput" value="#{car.faculty_id}"
+									style="width:100%" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="First Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.first_name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.first_name}" style="width:100%"
+									label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Middle Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.middle_name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.middle_name}" style="width:100%"
+									label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Last Name">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.last_name}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.last_name}" style="width:100%"
+									label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Address">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.address}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.address}" style="width:100%"
+									label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Designation">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.designation}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.designation}" style="width:100%"
+									label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Course Id">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.course_id}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.course_id}" style="width:100%"
+									label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+
+					<p:column headerText="Faculty Type">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{car.faculty_type}" />
+							</f:facet>
+							<f:facet name="input">
+								<p:inputText value="#{car.faculty_type}" style="width:100%"
+									label="Year" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					<p:column style="width:35px">
+						<p:rowEditor />
+					</p:column>
+
+					<p:column>
+						<h:commandButton value="Update"
+							actionListener="#{miniProjectFaculties.updateData(car.faculty_id, car.first_name, car.middle_name, car.last_name, car.address, car.designation, car.course_id, car.faculty_type)}" />
+					</p:column>
+
+
+				</p:dataTable>
+
+			</p:tab>
+ -->
+
+
+
+
+
+		</p:tabView>
+	</h:form>
+
+</ui:composition>
